@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_rb1">
+
+    <!-- Properties -->
+    <xacro:property name="base_cylinder_kp" value="1000.0"/>
+	<xacro:property name="base_cylinder_kd" value="1000.0"/>
+	<xacro:property name="base_cylinder_mu1" value="10.0"/>
+    <xacro:property name="base_cylinder_mu2" value="10.0"/>
+
+    <!-- The robot is a cylinder 50 cm in diameter and 30 cm in height -->
+    <xacro:property name="base_cylinder_radius" value="0.25"/>
+    <xacro:property name="base_cylinder_height" value="0.3"/>
+    <xacro:property name="base_cylinder_mass" value="25"/>
+
+    <xacro:macro name="rviz_materials">
+        <material name="grey">
+            <color rgba="0.75 0.75 0.75 1"/>
+        </material>
+    </xacro:macro>
+
+    <!-- base cylinder XACRO -->
+    <xacro:macro name="base_cylinder">
+
+        <link name="base_link">
+        </link>
+
+        <link name="base_cylinder_link">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="${base_cylinder_mass}" />
+                <xacro:cylinder_inertia mass="${base_cylinder_mass}"
+                    r="${base_cylinder_radius}"
+                    l="${base_cylinder_height}"
+                />           
+            </inertial>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder radius="${base_cylinder_radius}" length="${base_cylinder_height}"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="0.0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <cylinder radius="${base_cylinder_radius}" length="${base_cylinder_height}"/>
+                </geometry>
+            </visual>
+        </link>
+
+        <gazebo reference="base_cylinder_link">
+            <mu1>${base_cylinder_mu1}</mu1>
+            <mu2>${base_cylinder_mu2}</mu2>
+            <kp>${base_cylinder_kp}</kp>
+            <kd>${base_cylinder_kd}</kd>
+        </gazebo>
+
+        <joint name="fixed" type="fixed">
+            <parent link="base_link"/>
+            <child link="base_cylinder_link"/>
+        </joint>
+
+    </xacro:macro>
+
+    
+    <!-- Math Usefull MACROS-->
+    <xacro:macro  name="cylinder_inertia" params="mass r l">
+      <inertia  ixx="${mass*(3*r*r+l*l)/12}" ixy = "0" ixz = "0"
+                iyy="${mass*(3*r*r+l*l)/12}" iyz = "0"
+                izz="${mass*(r*r)/2}" />
+    </xacro:macro >
+
+    <xacro:macro name="box_inertia" params="mass x y z">
+      <inertia  ixx="${mass*(y*y+z*z)/12}" ixy = "0" ixz = "0"
+                iyy="${mass*(x*x+z*z)/12}" iyz = "0"
+                izz="${mass*(x*x+z*z)/12}"
+      />
+    </xacro:macro>
+
+    <xacro:macro name="sphere_inertia" params="mass r">
+        <inertia  
+            ixx="${2*mass*r*r/5}" ixy = "0" ixz = "0"
+            iyy="${2*mass*r*r/5}" iyz = "0"
+            izz="${2*mass*r*r/5}"
+        />
+    </xacro:macro>  
+
+
+    <xacro:base_cylinder />
+
+
+</robot>

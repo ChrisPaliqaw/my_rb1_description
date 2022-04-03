@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find my_rb1_description)/rviz_config/my_rb1.rviz"/>
+</launch>
