@@ -11,12 +11,10 @@
     <xacro:property name="base_cylinder_radius" value="0.25"/>
     <xacro:property name="base_cylinder_height" value="0.3"/>
     <xacro:property name="base_cylinder_mass" value="25"/>
-
-    <xacro:macro name="rviz_materials">
-        <material name="dark_blue">
-            <color rgba="0 0 0.55 1"/>
-        </material>
-    </xacro:macro>
+    
+    <material name="dark_blue">
+        <color rgba="0 0 0.55 1"/>
+    </material>
 
     <!-- base cylinder XACRO -->
     <xacro:macro name="base_cylinder">
@@ -85,7 +83,6 @@
             izz="${2*mass*r*r/5}"
         />
     </xacro:macro>  
-
 
     <xacro:base_cylinder />
 
