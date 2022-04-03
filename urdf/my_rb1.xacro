@@ -13,8 +13,8 @@
     <xacro:property name="base_cylinder_mass" value="25"/>
 
     <xacro:macro name="rviz_materials">
-        <material name="grey">
-            <color rgba="0.75 0.75 0.75 1"/>
+        <material name="dark_blue">
+            <color rgba="0 0 0.55 1"/>
         </material>
     </xacro:macro>
 
@@ -44,6 +44,7 @@
                 <geometry>
                     <cylinder radius="${base_cylinder_radius}" length="${base_cylinder_height}"/>
                 </geometry>
+                <material name="dark_blue"/>
             </visual>
         </link>
 
