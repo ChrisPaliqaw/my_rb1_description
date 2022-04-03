@@ -57,6 +57,7 @@
         <joint name="fixed" type="fixed">
             <parent link="base_link"/>
             <child link="base_cylinder_link"/>
+            <origin rpy="0.0 0 0" xyz="0 0 ${base_cylinder_height * 0.5}"/>
         </joint>
 
     </xacro:macro>
