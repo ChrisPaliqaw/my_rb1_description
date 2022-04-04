@@ -1,19 +1,43 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_rb1">
 
+    <!-- All 4 wheels have the same mass -->
+    <xacro:property name="wheel_mass" value="0.25"/>
+    <xacro:property name="wheel_count" value="4"/>
+    <xacro:property name="base_cylinder_mass" value="${25 - (wheel_count*wheel_mass)}"/>
+
     <!-- Properties -->
     <xacro:property name="base_cylinder_kp" value="1000.0"/>
 	<xacro:property name="base_cylinder_kd" value="1000.0"/>
 	<xacro:property name="base_cylinder_mu1" value="10.0"/>
     <xacro:property name="base_cylinder_mu2" value="10.0"/>
 
+    <xacro:property name="wheel_kp" value="1000.0"/>
+	<xacro:property name="wheel_kd" value="1000.0"/>
+	<xacro:property name="wheel_mu1" value="10.0"/>
+    <xacro:property name="wheel_mu2" value="10.0"/>
+
     <!-- The robot is a cylinder 50 cm in diameter and 30 cm in height -->
     <xacro:property name="base_cylinder_radius" value="0.25"/>
     <xacro:property name="base_cylinder_height" value="0.3"/>
-    <xacro:property name="base_cylinder_mass" value="25"/>
+
+    <!-- Has 2 wheels of 5 cm diameter on each side of the base. One at (0.1, -0.2, -0.15)
+         from the base_link and another at (0.1, 0.2, -0.15). -->
+    <xacro:property name="wheel_radius" value="0.025"/>
+    <xacro:property name="wheel_height" value="0.025"/>
+    <xacro:property name="wheel_x" value="0.1"/>
+    <xacro:property name="left_wheel_y" value="-0.2"/>
+    <xacro:property name="wheel_z" value="-0.15"/>
+    <xacro:property name="wheel_roll" value="1.57"/>
+    <xacro:property name="wheel_pitch" value="0"/>
+    <xacro:property name="wheel_yaw" value="0"/>
     
     <material name="dark_blue">
         <color rgba="0 0 0.55 1"/>
+    </material>
+
+    <material name="black">
+        <color rgba="0 0 0 1"/>
     </material>
 
     <!-- base cylinder XACRO -->
@@ -53,12 +77,55 @@
             <kd>${base_cylinder_kd}</kd>
         </gazebo>
 
-        <joint name="fixed" type="fixed">
+        <joint name="base_cylinder_base_link_joint" type="fixed">
             <parent link="base_link"/>
             <child link="base_cylinder_link"/>
-            <origin rpy="0.0 0 0" xyz="0 0 ${base_cylinder_height * 0.5}"/>
+            <!--<origin rpy="0.0 0 0" xyz="0 0 ${base_cylinder_height * 0.5}"/>-->
+            <origin rpy="0.0 0 0" xyz="0 0 0"/>
         </joint>
 
+    </xacro:macro>
+
+    <xacro:macro name="wheel" params="side">
+        <xacro:property name="multiplier" value="${-1 if side == 'right' else 1}"/>
+        <xacro:property name="current_wheel_name" value="${side}_wheel_link"/>
+        <link name="${current_wheel_name}">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="${wheel_mass}" />
+                <xacro:cylinder_inertia mass="${wheel_mass}"
+                    r="${wheel_radius}"
+                    l="${wheel_height}"
+                />           
+            </inertial>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_height}"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_height}"/>
+                </geometry>
+                <material name="black"/>
+            </visual>
+        </link>
+
+        <gazebo reference="${current_wheel_name}">
+            <mu1>${wheel_mu1}</mu1>
+            <mu2>${wheel_mu2}</mu2>
+            <kp>${wheel_kp}</kp>
+            <kd>${wheel_kd}</kd>
+        </gazebo>
+
+        <joint name="${current_wheel_name}_base_link_joint" type="continuous">
+            <parent link="base_link"/>
+            <child link="${current_wheel_name}"/>
+            <origin xyz="${wheel_x} ${multiplier * left_wheel_y} ${wheel_z}" rpy="${wheel_roll} ${wheel_pitch} ${wheel_yaw}" />
+             <axis xyz="0 0 1"/>
+        </joint>
     </xacro:macro>
 
     
@@ -85,6 +152,8 @@
     </xacro:macro>  
 
     <xacro:base_cylinder />
+    <xacro:wheel side="left" />
+    <xacro:wheel side="right" />
 
 
 </robot>
