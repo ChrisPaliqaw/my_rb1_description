@@ -3,8 +3,12 @@
 
     <!-- All 4 wheels have the same mass -->
     <xacro:property name="wheel_mass" value="0.25"/>
-    <xacro:property name="wheel_count" value="4"/>
-    <xacro:property name="base_cylinder_mass" value="${25 - (wheel_count*wheel_mass)}"/>
+    <xacro:property name="caster_mass" value="${wheel_mass}"/>
+    <xacro:property name="wheel_count" value="2"/>
+    <xacro:property name="wheel_mass_total" value="${wheel_count * wheel_mass}"/>
+    <xacro:property name="caster_count" value="2"/>
+    <xacro:property name="caster_mass_total" value="${caster_count * caster_mass}"/>
+    <xacro:property name="base_cylinder_mass" value="${25 - (wheel_mass_total + caster_mass_total)}"/>
 
     <!-- Properties -->
     <xacro:property name="base_cylinder_kp" value="1000.0"/>
@@ -16,6 +20,11 @@
 	<xacro:property name="wheel_kd" value="1000.0"/>
 	<xacro:property name="wheel_mu1" value="10.0"/>
     <xacro:property name="wheel_mu2" value="10.0"/>
+
+    <xacro:property name="caster_kp" value="1000.0"/>
+	<xacro:property name="caster_kd" value="1000.0"/>
+	<xacro:property name="caster_mu1" value="0"/>
+    <xacro:property name="caster_mu2" value="0"/>
 
     <!-- The robot is a cylinder 50 cm in diameter and 30 cm in height -->
     <xacro:property name="base_cylinder_radius" value="0.25"/>
@@ -31,6 +40,14 @@
     <xacro:property name="wheel_roll" value="1.57"/>
     <xacro:property name="wheel_pitch" value="0"/>
     <xacro:property name="wheel_yaw" value="0"/>
+
+    <!-- Has two caster wheels: one at the front and another at the back of the robot of 2.5 cm radius.
+         The friction parameters must be "0". One at (-0.1, 0.0, -0.15) from the base_link and another
+         at (0.1, 0.0, -0.15).-->
+    <xacro:property name="caster_radius" value="0.025"/>
+    <xacro:property name="front_caster_x" value="0.1"/>
+    <xacro:property name="caster_y" value="0"/>
+    <xacro:property name="caster_z" value="-0.15"/>
     
     <material name="dark_blue">
         <color rgba="0 0 0.55 1"/>
@@ -38,6 +55,10 @@
 
     <material name="black">
         <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="white">
+        <color rgba="1 1 1 1"/>
     </material>
 
     <!-- base cylinder XACRO -->
@@ -128,6 +149,48 @@
         </joint>
     </xacro:macro>
 
+    <xacro:macro name="caster" params="side">
+        <xacro:property name="multiplier" value="${-1 if side == 'front' else 1}"/>
+        <xacro:property name="current_caster_name" value="${side}_caster_link"/>
+        <link name="${current_caster_name}">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="${caster_mass}" />
+                <xacro:sphere_inertia mass="${caster_mass}"
+                    r="${caster_radius}"
+                />           
+            </inertial>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <sphere radius="${caster_radius}"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin rpy="0 0 0" xyz="0 0 0"/>
+                <geometry>
+                    <sphere radius="${caster_radius}"/>
+                </geometry>
+                <material name="white"/>
+            </visual>
+        </link>
+
+        <gazebo reference="${current_caster_name}">
+            <mu1>${caster_mu1}</mu1>
+            <mu2>${caster_mu2}</mu2>
+            <kp>${caster_kp}</kp>
+            <kd>${caster_kd}</kd>
+        </gazebo>
+
+        <joint name="${current_caster_name}_base_link_joint" type="fixed">
+            <parent link="base_link"/>
+            <child link="${current_caster_name}"/>
+            <origin
+                xyz="${multiplier * front_caster_x} ${caster_y}  ${caster_z}"
+                rpy="0 0 0" />
+        </joint>
+    </xacro:macro>
+
     
     <!-- Math Usefull MACROS-->
     <xacro:macro  name="cylinder_inertia" params="mass r l">
@@ -154,6 +217,7 @@
     <xacro:base_cylinder />
     <xacro:wheel side="left" />
     <xacro:wheel side="right" />
-
+    <xacro:caster side="front" />
+    <xacro:caster side="back" />
 
 </robot>
