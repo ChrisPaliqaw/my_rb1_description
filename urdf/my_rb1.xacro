@@ -22,18 +22,6 @@
     <xacro:property name="base_cylinder_mass" value="${25 - (wheel_mass_total + caster_mass_total)}"/>
 
     <!-- Properties -->
-    <xacro:property name="base_cylinder_kp" value="1000.0"/>
-	<xacro:property name="base_cylinder_kd" value="1000.0"/>
-	<xacro:property name="base_cylinder_mu1" value="10.0"/>
-    <xacro:property name="base_cylinder_mu2" value="10.0"/>
-
-    <xacro:property name="wheel_kp" value="1000.0"/>
-	<xacro:property name="wheel_kd" value="1000.0"/>
-	<xacro:property name="wheel_mu1" value="10.0"/>
-    <xacro:property name="wheel_mu2" value="10.0"/>
-
-    <xacro:property name="caster_kp" value="1000.0"/>
-	<xacro:property name="caster_kd" value="1000.0"/>
 	<xacro:property name="caster_mu1" value="0"/>
     <xacro:property name="caster_mu2" value="0"/>
 
@@ -109,10 +97,7 @@
         </link>
 
         <gazebo reference="base_cylinder_link">
-            <mu1>${base_cylinder_mu1}</mu1>
-            <mu2>${base_cylinder_mu2}</mu2>
-            <kp>${base_cylinder_kp}</kp>
-            <kd>${base_cylinder_kd}</kd>
+            <material>Gazebo/Blue</material>
         </gazebo>
 
         <joint name="base_cylinder_base_link_joint" type="fixed">
@@ -165,10 +150,7 @@
         </link>
 
         <gazebo reference="${current_wheel_name}">
-            <mu1>${wheel_mu1}</mu1>
-            <mu2>${wheel_mu2}</mu2>
-            <kp>${wheel_kp}</kp>
-            <kd>${wheel_kd}</kd>
+            <material>Gazebo/Black</material>
         </gazebo>
 
         <joint name="${current_wheel_name}_base_link_joint" type="continuous">
@@ -208,8 +190,7 @@
         <gazebo reference="${current_caster_name}">
             <mu1>${caster_mu1}</mu1>
             <mu2>${caster_mu2}</mu2>
-            <kp>${caster_kp}</kp>
-            <kd>${caster_kd}</kd>
+            <material>Gazebo/White</material>
         </gazebo>
 
         <joint name="${current_caster_name}_base_link_joint" type="fixed">
@@ -245,6 +226,7 @@
     </xacro:macro>
 
     <xacro:base_cylinder />
+    
     <xacro:wheel side="left" />
     <xacro:wheel side="right" />
     <xacro:caster side="front" />
