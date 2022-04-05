@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_rb1">
 
+    <!--
+    'front_laser' link must be located at (0.25, 0.0, 0.075) from the 'base_link'.
+    Also the link must be rotated 180º in the `x` axis, this means, the laser is upside-down.
+    -->
+    <xacro:property name="front_laser_x" value="0.25"/>
+    <xacro:property name="front_laser_y" value="0.0"/>
+    <xacro:property name="front_laser_z" value="0.075"/>
+    <xacro:property name="front_laser_roll" value="3.14"/>
+    <xacro:property name="front_laser_pitch" value="0"/>
+    <xacro:property name="front_laser_yaw" value="0"/>
+
     <!-- All 4 wheels have the same mass -->
     <xacro:property name="wheel_mass" value="0.25"/>
     <xacro:property name="caster_mass" value="${wheel_mass}"/>
@@ -70,6 +81,9 @@
         <link name="base_footprint">
         </link>
 
+        <link name="front_laser">
+        </link>
+
         <link name="base_cylinder_link">
             <inertial>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -111,6 +125,14 @@
             <parent link="base_link"/>
             <child link="base_footprint"/>
             <origin rpy="0.0 0 0" xyz="0 0 ${base_cylinder_height * -0.5}"/>
+        </joint>
+
+        <joint name="front_laser_base_link_joint" type="fixed">
+            <parent link="base_link"/>
+            <child link="front_laser"/>
+            <origin
+                xyz="${front_laser_x} ${front_laser_y} ${front_laser_z}"
+                rpy="${front_laser_roll} ${front_laser_pitch} ${front_laser_yaw}"/>
         </joint>
 
     </xacro:macro>
