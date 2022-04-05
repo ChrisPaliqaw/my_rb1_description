@@ -25,6 +25,11 @@
 	<xacro:property name="caster_mu1" value="0"/>
     <xacro:property name="caster_mu2" value="0"/>
 
+    <xacro:property name="wheel_kp" value="1000000.0"/>
+    <xacro:property name="wheel_kd" value="100.0"/>
+    <xacro:property name="wheel_mu1" value="1.0"/>
+    <xacro:property name="wheel_mu2" value="1.0"/>
+
     <!-- The robot is a cylinder 50 cm in diameter and 30 cm in height -->
     <xacro:property name="base_cylinder_radius" value="0.25"/>
     <xacro:property name="base_cylinder_height" value="0.3"/>
@@ -151,6 +156,10 @@
 
         <gazebo reference="${current_wheel_name}">
             <material>Gazebo/Black</material>
+            <kp>${wheel_kp}</kp>
+            <kd>${wheel_kd}</kd>
+            <mu1>${wheel_mu1}</mu1>
+            <mu2>${wheel_mu2}</mu2>
         </gazebo>
 
         <joint name="${current_wheel_name}_base_link_joint" type="continuous">
