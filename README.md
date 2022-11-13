@@ -1,6 +1,8 @@
 # my_rb1_description
 
-Clone this project and `my_rb1_gazebo` to your `catkin_ws`.
+![Moving the joints using joint_state_publisher_gui](my_rb1_description.png)
+
+Clone this project to your `catkin_ws/src`.
 
 Open 3 shells
 
