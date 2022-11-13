@@ -19,4 +19,9 @@ source ~/catkin_ws/devel/setup.bash
 roslaunch my_rb1_description my_rb1_model.launch
 ```
 
-3. Run rviz, then load my_rb1_description/rviz_config/my_rb1.rviz
+3. rviz
+```
+source ~/simulation_ws/devel/setup.bash
+source ~/catkin_ws/devel/setup.bash
+roslaunch my_rb1_description rviz.launch
+```
