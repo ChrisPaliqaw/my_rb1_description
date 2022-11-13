@@ -16,7 +16,7 @@ roscore
 ```
 source ~/simulation_ws/devel/setup.bash
 source ~/catkin_ws/devel/setup.bash
-roslaunch my_rb1_gazebo my_rb1_robot_warehouse.launch
+roslaunch my_rb1_gazebo my_rb1_model.launch
 ```
 
 3. Run rviz, then load my_rb1_description/rviz_config/my_rb1.rviz
