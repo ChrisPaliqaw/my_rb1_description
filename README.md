@@ -6,24 +6,9 @@ I created a URDF version of an RB1 robot that can be manipulated with joint_stat
 
 Clone this project to your `catkin_ws/src`.
 
-Open 3 shells
+Open 1 shell
 
-1. roscore
-
-```
-source ~/catkin_ws/devel/setup.bash
-roscore
-```
-
-2. gazebo
-
-```
-source ~/simulation_ws/devel/setup.bash
-source ~/catkin_ws/devel/setup.bash
-roslaunch my_rb1_description my_rb1_model.launch
-```
-
-3. rviz
+1. rviz
 ```
 source ~/simulation_ws/devel/setup.bash
 source ~/catkin_ws/devel/setup.bash
