@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+    <include file="$(find my_rb1_description)/launch/my_rb1_model.launch"/>
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find my_rb1_description)/rviz_config/my_rb1.rviz"/>
     <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/>
 </launch>
